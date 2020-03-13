@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace AppQuestionario
@@ -27,7 +28,14 @@ namespace AppQuestionario
 
                 if(txtUsuario == "root" && txtSenha == "root123")
                 {
-                    App.Current.MainPage = new AppQuestionario.MenuPage();
+                    if(Connectivity.NetworkAccess == NetworkAccess.Internet)
+                    {
+                        App.Current.MainPage = new AppQuestionario.MenuPage();
+                    }
+                    else
+                    {
+                        DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
+                    }
                 }
                 else
                 {

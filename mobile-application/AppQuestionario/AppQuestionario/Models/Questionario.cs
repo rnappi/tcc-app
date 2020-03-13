@@ -6,8 +6,12 @@ namespace AppQuestionario.Models
 {
     public class Questionario
     {
-        public int IDQuestionario { get; set; }
-        public string Nome { get; set; }
-        public DateTime Data { get; set; }
+        public int id_Questionario { get; set; }
+        public int id_Pergunta { get; set; }
+        public int id_Alternativa { get; set; }
+        public string NomeQuestionario { get; set; }
+        public string Pergunta { get; set; }
+        public string DescricaoAlternativa { get; set; }
+        public string Alternativa_Correta { get; set; }
     }
 }

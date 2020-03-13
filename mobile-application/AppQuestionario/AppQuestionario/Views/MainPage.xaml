@@ -11,12 +11,14 @@
         <Label Text="Usuário:" 
            HorizontalOptions="Center" />
         <Entry Placeholder="Digite o usuário"
+               Text="root"
                x:Name="xTxtUsuario" />
 
         <Label Text="Senha:" 
            HorizontalOptions="Center" />
         <Entry IsPassword="True" 
                Placeholder="Digite a senha"
+               Text="root123"
                x:Name="xTxtSenha" />
 
         <Button Text="Entrar"

@@ -1,5 +1,18 @@
+import api.DAO.questionarioDAO
 import api
-import DAO.questionarioDAO
+
+@api.app.route('/api/questionarios/<idQuestionario>', methods=['GET'])
+def questionarios(idQuestionario):
+    return api.DAO.questionarioDAO.pegarQuestionarios(idQuestionario)
+
+@api.app.route('/api/questionarios', methods=['POST'])
+def verificarMaterial():
+    json = api.request.json
+    return api.DAO.questionarioDAO.indicarMaterial(json)
+
+@api.app.route('/', methods=['GET'])
+def statusAPI():
+    return '<h1>Status API Questionarios ok</h1>'
 
 
 @api.app.route('/api/auth', methods=['POST'])
@@ -7,10 +20,6 @@ def adicionarQuestionario():
     return """{
                 token:'fdg6d6f2g6adg565df4g56d4g6dfg54d45fgfg4d'
               }"""
-
-@api.app.route('/api/questionarios/<id_questionario>', methods=['GET'])
-def questionario(id_questionario):
-    return DAO.questionarioDAO.pegarQuestionarios(id_questionario)
 
 @api.app.route('/api/alunos/<id_aluno>', methods=['GET'])
 def questionarios(id_aluno):
