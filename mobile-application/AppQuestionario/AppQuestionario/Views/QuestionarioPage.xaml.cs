@@ -18,15 +18,18 @@ namespace AppQuestionario.Views
         public QuestionarioPage()
         {
             InitializeComponent();
-            string url = "http://127.0.0.1:5000/api/questionarios/1";
+
+            /*string url = "http://127.0.0.1:8080/api/questionarios/1";
 
             if (Device.RuntimePlatform == Device.Android)
             {
-                url = "http://10.0.2.2:5000/api/questionarios/1";
+                url = "http://10.0.2.2:8080/api/questionarios/1";
             }
 
             WebClient wc = new WebClient();
-            var json = wc.DownloadString(url);
+            var json = wc.DownloadString(url);*/
+
+            var json = MocJSON();
 
             List<Questionario> questionario = JsonConvert.DeserializeObject<List<Questionario>>(json);
 
@@ -193,5 +196,10 @@ namespace AppQuestionario.Views
 
             return cardFrame;
         }*/
+
+        private string MocJSON()
+        {
+            return "[{ \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Vossa Excelência Reverendíssima.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"O pronome de tratamento que melhor completa a oração a seguir é: __________________, cardeal Dom Sérgio da Rocha, acompanhará o Papa em sua visita ao Brasil.\", \"id_Alternativa\":1, \"id_Pergunta\":1, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Vossa Santidade.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"O pronome de tratamento que melhor completa a oração a seguir é: __________________, cardeal Dom Sérgio da Rocha, acompanhará o Papa em sua visita ao Brasil.\", \"id_Alternativa\":2, \"id_Pergunta\":1, \"id_Questionario\":1   },   { \"Alternativa_Correta\":1, \"DescricaoAlternativa\":\"Vossa Eminência.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"O pronome de tratamento que melhor completa a oração a seguir é: __________________, cardeal Dom Sérgio da Rocha, acompanhará o Papa em sua visita ao Brasil.\", \"id_Alternativa\":3, \"id_Pergunta\":1, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Vossa Magnificência.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"O pronome de tratamento que melhor completa a oração a seguir é: __________________, cardeal Dom Sérgio da Rocha, acompanhará o Papa em sua visita ao Brasil.\", \"id_Alternativa\":4, \"id_Pergunta\":1, \"id_Questionario\":1   },   { \"Alternativa_Correta\":1, \"DescricaoAlternativa\":\"Espera-se que, no Brasil, Sua Santidade, o Papa Francisco, seja recebido, com o devido respeito, pelos jovens.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(FCC- modificada) Os pronomes de tratamento estão empregados corretamente em:\", \"id_Alternativa\":5, \"id_Pergunta\":2, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"O advogado assim se pronunciou perante o juiz: - Peço a Vossa Senhoria que ouça o depoimento desta nova testemunha.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(FCC- modificada) Os pronomes de tratamento estão empregados corretamente em:\", \"id_Alternativa\":6, \"id_Pergunta\":2, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Vossa Majestade, a princesa da Inglaterra, foi homenageada por ocasião do seu aniversário.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(FCC- modificada) Os pronomes de tratamento estão empregados corretamente em:\", \"id_Alternativa\":7, \"id_Pergunta\":2, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Refiro-me ao Ilustríssimo Senhor, Cardeal de Brasília, ao enviar-lhe as notícias do Conclave.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(FCC- modificada) Os pronomes de tratamento estão empregados corretamente em:\", \"id_Alternativa\":8, \"id_Pergunta\":2, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Reitores de universidades.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Prime Concursos) O pronome de tratamento Vossa Reverendíssima é usado para:\", \"id_Alternativa\":9, \"id_Pergunta\":3, \"id_Questionario\":1   },   { \"Alternativa_Correta\":1, \"DescricaoAlternativa\":\"Sacerdotes em geral.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Prime Concursos) O pronome de tratamento Vossa Reverendíssima é usado para:\", \"id_Alternativa\":10, \"id_Pergunta\":3, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Papas.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Prime Concursos) O pronome de tratamento Vossa Reverendíssima é usado para:\", \"id_Alternativa\":11, \"id_Pergunta\":3, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Altas autoridades.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Prime Concursos) O pronome de tratamento Vossa Reverendíssima é usado para:\", \"id_Alternativa\":12, \"id_Pergunta\":3, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Príncipes.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Crescer Consultoria) Vossa Eminência é o pronome de tratamento utilizado para:\", \"id_Alternativa\":13, \"id_Pergunta\":4, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Imperadores.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Crescer Consultoria) Vossa Eminência é o pronome de tratamento utilizado para:\", \"id_Alternativa\":14, \"id_Pergunta\":4, \"id_Questionario\":1   },   { \"Alternativa_Correta\":1, \"DescricaoAlternativa\":\"Cardeais.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Crescer Consultoria) Vossa Eminência é o pronome de tratamento utilizado para:\", \"id_Alternativa\":15, \"id_Pergunta\":4, \"id_Questionario\":1   },   { \"Alternativa_Correta\":0, \"DescricaoAlternativa\":\"Reitores de universidades.\", \"NomeQuestionario\":\"Português - Gramática\", \"Pergunta\":\"(Crescer Consultoria) Vossa Eminência é o pronome de tratamento utilizado para:\", \"id_Alternativa\":16, \"id_Pergunta\":4, \"id_Questionario\":1 }]";
+        }
     }
 }

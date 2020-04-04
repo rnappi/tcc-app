@@ -3,30 +3,117 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Flex.Controls;assembly=Flex"
              mc:Ignorable="d"
+             Title="APP Questionários"
              x:Class="AppQuestionario.MainPage">
 
-    <StackLayout Padding="100">        
-        
-        <Label Text="Usuário:" 
-               HorizontalOptions="Center"
-               Margin="0, 10, 0, 0"/>
-        <Entry Placeholder="Digite o usuário"
-               Text="root"
-               x:Name="xTxtUsuario" />
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="btnConfig" Text="Configurações" IconImageSource="config32.png" Clicked="btnConfig_Clicked" />
+        <ToolbarItem x:Name="btnSair" Text="Sair" IconImageSource="close32.png" Clicked="btnSair_Clicked" />
+    </ContentPage.ToolbarItems>
 
-        <Label Text="Senha:" 
-               HorizontalOptions="Center"
-               Margin="0, 30, 0, 0"/>
-        <Entry IsPassword="True" 
-               Placeholder="Digite a senha"
-               Text="root123"
-               x:Name="xTxtSenha" />
+    <ContentPage.Content>
+        <StackLayout Opacity="1">
+            <Grid x:Name="gridLogin">
+                <Image Source="folhas.jpg" Aspect="Fill" Opacity="0.2" />
+                <ScrollView>
+                    <StackLayout Margin="10" Padding="50">
 
-        <Button Text="Entrar"
-                x:Name="xBtnEntrar"
-                Clicked="xBtnEntrar_Clicked"
-                Margin="50, 30, 50, 0"/>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Image Source="user.png" HeightRequest="30" WidthRequest="30" Visual="Material"/>
+                            <Entry
+                                x:Name="txtUsuario"
+                                Text="root"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite o usuário"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
 
-    </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="0,15,0,0">
+                            <Image Source="password.png" HeightRequest="30" WidthRequest="30"/>
+                            <Entry
+                                x:Name="txtSenha"
+                                Text="root123"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                IsPassword="True"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite a senha"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
+
+                        <StackLayout Orientation="Vertical" Margin="0,30" HorizontalOptions="FillAndExpand" >
+                            <ActivityIndicator
+                                x:Name="aiLoad"
+                                IsVisible="False"
+                                IsRunning="True"
+                                Color="Blue"
+                                Visual="Material"
+                                HorizontalOptions="Center"
+                                />
+                            
+                            <controls:FlexButton
+                                x:Name="btnLogar"
+                                Clicked="btnLogar_Clicked"
+                                HorizontalOptions="Center"
+                                HeightRequest="50"
+                                FontSize="16"
+                                WidthRequest="150"
+                                CornerRadius="10"
+                                Text="Entrar"
+                                ForegroundColor="White"
+                                BackgroundColor="#3949ab"
+                                HighlightBackgroundColor="#3000ab"/>
+
+                            <Label Text="Ou"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Margin="0,15"
+                                HorizontalTextAlignment="Center"
+                                VerticalOptions="EndAndExpand"/>
+
+                            <controls:FlexButton
+                                x:Name="btnCadastrar"
+                                Clicked="btnCadastrar_Clicked"
+                                HorizontalOptions="Center"
+                                HeightRequest="50"
+                                FontSize="16"
+                                WidthRequest="150"
+                                CornerRadius="10"
+                                Text="Cadastrar-se"
+                                ForegroundColor="White"
+                                BackgroundColor="#f44336"
+                                HighlightBackgroundColor="#f40000"/>
+                        </StackLayout>
+
+                        <StackLayout HorizontalOptions="Center" Margin="0,10">
+                            <controls:FlexButton
+                                x:Name="btnEsqueceuSenha"
+                                Text="Esqueceu sua senha?"
+                                BackgroundColor="Transparent"
+                                ForegroundColor="Black"
+                                HighlightForegroundColor="Gray"
+                                FontAttributes="Bold"
+                                Clicked="btnEsqueceuSenha_Clicked"
+                                HorizontalOptions="Center"/>
+                        </StackLayout>
+
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+
 </ContentPage>

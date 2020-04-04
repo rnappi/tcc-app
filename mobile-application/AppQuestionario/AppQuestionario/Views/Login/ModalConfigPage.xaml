@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="AppQuestionario.Views.Login.ModalConfigPage">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand"
+                     BackgroundColor="DeepSkyBlue"
+                     Spacing="10"
+                     Padding="10">
+            
+            <Frame BorderColor="Orange"
+                   Margin="0"
+                   CornerRadius="15"
+                   Padding="15"
+                   Visual="Material"
+                   HasShadow="True">
+                <Label Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." 
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalTextAlignment="Start" 
+                       VerticalTextAlignment="Start"/>
+            </Frame>
+            
+            <ScrollView>
+                <StackLayout HorizontalOptions="FillAndExpand"
+                             VerticalOptions="FillAndExpand">
+                    
+                    <Frame BorderColor="Orange"
+                           Margin="0"
+                           CornerRadius="15"
+                           IsClippedToBounds="True"
+                           OutlineColor="Orange"
+                           Padding="0"
+                           Visual="Material"
+                           HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnTapGestureRecognizerTapped"
+                                NumberOfTapsRequired="1" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid ColumnSpacing="0" 
+                                  RowSpacing="0"
+                                  BackgroundColor="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.15*" />
+                                    <ColumnDefinition Width="0.85*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout BackgroundColor="Transparent"
+                                         HorizontalOptions="FillAndExpand"
+                                         VerticalOptions="FillAndExpand"
+                                         Grid.Column="0" 
+                                         Grid.Row="0">
+                                    <Label Text="A"
+                                           BackgroundColor="Orange"
+                                       FontSize="30" 
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                       HorizontalTextAlignment="Center" 
+                                       VerticalTextAlignment="Center"/>
+                                </StackLayout>
+
+                                <StackLayout BackgroundColor="Transparent" 
+                                         Padding="10,10"
+                                         Grid.Column="1" 
+                                         Grid.Row="0">
+                                    <Label Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="FillAndExpand"
+                                       VerticalOptions="FillAndExpand"
+                                       HorizontalTextAlignment="Start" 
+                                       VerticalTextAlignment="Start"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="Orange"
+                       Margin="0"
+                       CornerRadius="15"
+                       IsClippedToBounds="True"
+                       Padding="0"
+                       Visual="Material"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnTapGestureRecognizerTapped"
+                                NumberOfTapsRequired="1" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid ColumnSpacing="0" 
+                                  RowSpacing="0"
+                                  BackgroundColor="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.15*" />
+                                    <ColumnDefinition Width="0.85*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout BackgroundColor="Orange" 
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand"
+                                     Grid.Column="0" 
+                                     Grid.Row="0">
+                                    <Label Text="B" 
+                                   FontSize="30" 
+                                   FontAttributes="Bold" 
+                                   HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Center" 
+                                   VerticalTextAlignment="Center"/>
+                                </StackLayout>
+
+                                <StackLayout BackgroundColor="Transparent" 
+                                     Padding="10,10"
+                                     Grid.Column="1" 
+                                     Grid.Row="0">
+                                    <Label BackgroundColor="Transparent"
+                                           Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Start" 
+                                   VerticalTextAlignment="Start"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="Orange"
+                       Margin="0"
+                       CornerRadius="15"
+                       IsClippedToBounds="True" 
+                       Padding="0"
+                       Visual="Material"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnTapGestureRecognizerTapped"
+                                NumberOfTapsRequired="1" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid ColumnSpacing="0" 
+                                  RowSpacing="0"
+                                  BackgroundColor="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.15*" />
+                                    <ColumnDefinition Width="0.85*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout BackgroundColor="Orange" 
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand"
+                                     Grid.Column="0" 
+                                     Grid.Row="0">
+                                    <Label Text="C" 
+                                   FontSize="30" 
+                                   FontAttributes="Bold" 
+                                   HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Center" 
+                                   VerticalTextAlignment="Center"/>
+                                </StackLayout>
+
+                                <StackLayout BackgroundColor="Transparent" 
+                                     Padding="10,10"
+                                     Grid.Column="1" 
+                                     Grid.Row="0">
+                                    <Label BackgroundColor="Transparent"
+                                           Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Start" 
+                                   VerticalTextAlignment="Start"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame BorderColor="Orange"
+                       Margin="0"
+                       CornerRadius="15"
+                       IsClippedToBounds="True" 
+                       Padding="0"
+                       Visual="Material"
+                       HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnTapGestureRecognizerTapped"
+                                NumberOfTapsRequired="1" />
+                        </Frame.GestureRecognizers>
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid ColumnSpacing="0" RowSpacing="0" BackgroundColor="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.15*" />
+                                    <ColumnDefinition Width="0.85*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout BackgroundColor="Orange" 
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand"
+                                     Grid.Column="0" 
+                                     Grid.Row="0">
+                                    <Label Text="D" 
+                                   FontSize="30" 
+                                   FontAttributes="Bold" 
+                                   HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Center" 
+                                   VerticalTextAlignment="Center"/>
+                                </StackLayout>
+
+                                <StackLayout BackgroundColor="Transparent" 
+                                     Padding="10,10"
+                                     Grid.Column="1" 
+                                     Grid.Row="0">
+                                    <Label BackgroundColor="Transparent"
+                                           Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Start" 
+                                   VerticalTextAlignment="Start"/>
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

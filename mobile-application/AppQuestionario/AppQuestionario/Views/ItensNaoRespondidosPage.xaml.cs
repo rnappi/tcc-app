@@ -59,7 +59,7 @@ namespace AppQuestionario.Views
 
             var tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.Tapped += (s, e) => {
-                App.Current.MainPage = new QuestionarioPage();
+                Navigation.PushAsync(new QuestionarioPage());
                 var f = (s as Frame);
 
                 foreach (var item in slItens.Children)
