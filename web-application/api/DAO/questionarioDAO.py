@@ -54,6 +54,7 @@ def indicarMaterial(json):
                                 database='Questionarios')
 
     cursor = cnx.cursor()
+    r = ""
 
     try:
         query = F"""select Combinacao from view_material_indicado where id_Questionario = {json['questionario']}"""
@@ -61,16 +62,25 @@ def indicarMaterial(json):
         cursor.execute(query)
 
         payload = []
+        qtdPerguntas = 0 #Guarda a quantidade de perguntas do questionario
+
         for result in cursor:
 
             content = result[0].split(",")
+
+            if qtdPerguntas == 0:
+                qtdPerguntas = len(content) - 1
+
             payload.append(content)
+
+        if len(payload) <= 0:
+            raise Exception("Questionario não encontrado")
 
         base = pd.DataFrame(payload)
 
         #axis=1 indica coluna, o padrão é axis=0 que é linha
-        x = base.drop(10, axis=1) #Remove a coluna Material para pegar apenas as caracteristicas
-        y = base[10] #Pega apenas as classes material
+        x = base.drop(qtdPerguntas, axis=1) #Remove a coluna Material para pegar apenas as caracteristicas
+        y = base[qtdPerguntas] #Pega apenas as classes material
 
         #Cria o classificador e passa o k
         knn = KNeighborsClassifier(n_neighbors=1)
@@ -83,11 +93,12 @@ def indicarMaterial(json):
 
         mat = knn.predict(classificar)
 
-        r = f"{{'material:{mat}'}}"
+        r = f'{{"material":{mat[0]}}}'
 
     except Exception as e:
         cnx.rollback()
         print('Erro na conexão com o BD: ' + str(e))
+        r = f'{{"Erro":"{str(e)}"}}'
 
     cursor.close()
     cnx.close()
