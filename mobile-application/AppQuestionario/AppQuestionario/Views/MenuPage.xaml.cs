@@ -12,31 +12,32 @@ namespace AppQuestionario
             InitializeComponent();
 
             Children.Add(
-                new NavigationPage
-                (
+                
                     new ItensNaoRespondidosPage()
                     { 
-                        Title = "Aluno 1" 
-                    }
-                ) { Title= "Não respondidos" });
+                        Title = "Não respondidos" 
+                    });
 
             Children.Add(
-                new NavigationPage
-                (
+                
                     new ItensRespondidosPage() 
                     { 
-                        Title = "Aluno 1" 
-                    }
-                ) { Title = "Respondidos" });
+                        Title = "Respondidos" 
+                    });
 
             Children.Add(
-                new NavigationPage
-                (
+                
                     new ItensAvaliadosPage() 
                     { 
-                        Title = "Aluno 1" 
-                    }
-                ) { Title = "Avaliados" });
+                        Title = "Avaliados" 
+                    });
+        }
+
+        private async void btnSair_Clicked(object sender, System.EventArgs e)
+        {
+            bool sair = await DisplayAlert("Alerta", "Finalizar sessão?", "Sim", "Não");
+
+            if (sair) App.Current.MainPage = new NavigationPage(new MainPage());
         }
     }
 }

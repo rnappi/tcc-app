@@ -7,10 +7,12 @@
              x:Class="AppQuestionario.Views.ItensRespondidosPage"
              Title="Respondidos">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout BackgroundColor="DeepSkyBlue">
+            <Label Text="Não há itens respondidos"
+                   FontSize="18"
+                   TextColor="White"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

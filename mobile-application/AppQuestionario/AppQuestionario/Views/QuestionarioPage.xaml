@@ -5,4 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="AppQuestionario.Views.QuestionarioPage">
+    <CarouselPage.ToolbarItems>
+        <ToolbarItem x:Name="btnConfirmar" Text="Confirmar" IconImageSource="confirm32.png" />
+    </CarouselPage.ToolbarItems>
 </CarouselPage>

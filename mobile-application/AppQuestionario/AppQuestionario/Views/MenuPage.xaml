@@ -5,4 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="AppQuestionario.MenuPage">
+    <TabbedPage.ToolbarItems>
+        
+        <ToolbarItem x:Name="btnProcurar" Text="Procurar" IconImageSource="search32.png" />
+        <ToolbarItem x:Name="btnSair" Text="Sair" IconImageSource="logout.png" Clicked="btnSair_Clicked" />
+        
+    </TabbedPage.ToolbarItems>
 </TabbedPage>

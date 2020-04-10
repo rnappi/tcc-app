@@ -3,6 +3,7 @@ import api
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 
+
 def pegarQuestionarios(idQuestionario):
     cnx = mysql.connector.connect(user='root', password='root',
                                 host='127.0.0.1',
@@ -47,6 +48,51 @@ def pegarQuestionarios(idQuestionario):
     cursor.close()
     cnx.close()
     return r
+
+
+def pegarQuestionariosAluno(idAluno):
+    cnx = mysql.connector.connect(user='root', password='root',
+                                host='127.0.0.1',
+                                database='Questionarios')
+
+    cursor = cnx.cursor()
+
+    try:
+        query = """select q.id_Questionario,
+	                      (select count(1) from perguntas p 
+                                          where p.id_Questionario = q.id_Questionario) qtdPerguntas,
+                          (select count(1) from perguntas p2
+						                   join Alternativas a on a.id_Pergunta = p2.id_Pergunta                        
+					                      where p2.id_Questionario =  q.id_Questionario
+					                   group by a.id_Pergunta
+                                          limit 1) qtdAlternativas,
+                          q.Nome as NomeQuestionario
+                     from questionarios q; """
+
+        # query += f"where q.id_Questionario = {idAluno}"
+        
+        cursor.execute(query)
+
+        payload = []
+        content = {}
+        for result in cursor:
+            content = { 'id_Questionario': result[0], 
+                        'qtdPerguntas': result[1],
+                        'qtdAlternativas': result[2],
+                        'NomeQuestionario': result[3]}
+
+            payload.append(content)
+
+        r = api.jsonify(payload)
+
+    except Exception as e:
+        cnx.rollback()
+        print('Erro na conexão com o BD: ' + str(e))
+
+    cursor.close()
+    cnx.close()
+    return r
+
 
 def indicarMaterial(json):
     cnx = mysql.connector.connect(user='root', password='root',

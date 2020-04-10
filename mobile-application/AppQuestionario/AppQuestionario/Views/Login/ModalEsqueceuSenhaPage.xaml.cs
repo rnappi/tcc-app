@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace AppQuestionario.Views.Login
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ModalConfigPage : ContentPage
+    public partial class ModalEsqueceuSenhaPage : ContentPage
     {
-        public ModalConfigPage()
+        public ModalEsqueceuSenhaPage()
         {
             InitializeComponent();
         }

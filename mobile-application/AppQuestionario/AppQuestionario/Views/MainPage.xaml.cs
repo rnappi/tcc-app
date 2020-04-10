@@ -1,23 +1,33 @@
-﻿using AppQuestionario.Views.Login;
+﻿using AppQuestionario.Models;
+using AppQuestionario.Views.Login;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace AppQuestionario
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
+        public bool rodar { get; private set; }
+
         public MainPage()
         {
             InitializeComponent();
+
+            this.rodar = true;
+            BindingContext = this;
         }
 
         private void btnConfig_Clicked(object sender, EventArgs e)
@@ -32,7 +42,7 @@ namespace AppQuestionario
 
         private void btnEsqueceuSenha_Clicked(object sender, EventArgs e)
         {
-
+            Navigation.PushAsync(new ModalEsqueceuSenhaPage());
         }
 
         private void btnCadastrar_Clicked(object sender, EventArgs e)
@@ -42,19 +52,28 @@ namespace AppQuestionario
 
         private void Validar()
         {
+            string dbPath = Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+                            App.NOME_DB);
+
+            var db = new SQLiteConnection(dbPath);
+            db.CreateTable<Models.Usuario>();
+
             var strUsuario = txtUsuario.Text == null ? "" : txtUsuario.Text.Trim();
             var strSenha = txtSenha.Text == null ? "" : txtSenha.Text.Trim();
 
-            if (strUsuario == "root" && strSenha == "root123")
+            var usuario = db.Query<Usuario>($"SELECT * FROM Usuario WHERE Login = '{strUsuario}'").FirstOrDefault();
+
+            if (strUsuario == usuario?.Login && strSenha == usuario?.Senha)
             {
-                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    App.Current.MainPage = new AppQuestionario.MenuPage();
-                }
-                else
-                {
-                    DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
-                }
+                //if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                //{
+                    App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage() { Title = "Aluno 1" });
+                //}
+                //else
+                //{
+                //    DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
+                //}
             }
             else
             {
@@ -68,7 +87,7 @@ namespace AppQuestionario
 
         private async Task delayTeste()
         {
-            await Task.Delay(5000);
+            await Task.Delay(1000);
         }
 
         private async void btnLogar_Clicked(object sender, EventArgs e)

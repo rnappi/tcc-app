@@ -35,7 +35,7 @@ def questionariosAluno(id_aluno):
 #Traz os questionários do aluno informado
 @api.app.route('/api/alunos/<id_aluno>/questionarios', methods=['GET'])
 def questionarioAluno(id_aluno):
-    return api.DAO.questionarioDAO.pegarQuestionarios(id_aluno)
+    return api.DAO.questionarioDAO.pegarQuestionariosAluno(id_aluno)
 
 
 #Lista as tentativas do aluno podendo filtrar por questionarios

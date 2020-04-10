@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="AppQuestionario.Views.ContentViews.ConteudoAlternativa">
+  <ContentView.Content>
+
+        <Frame BorderColor="Orange"
+                BackgroundColor="White"
+                Margin="0"
+                CornerRadius="15"
+                IsClippedToBounds="True"
+                OutlineColor="Orange"
+                Padding="0"
+                Visual="Material"
+                HasShadow="True">
+                    
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="OnTapGestureRecognizerTapped"
+                    NumberOfTapsRequired="1" />
+            </Frame.GestureRecognizers>
+            
+            <StackLayout BackgroundColor="Transparent">
+
+                <Label x:Name="idPergunta" 
+                       IsVisible="False" 
+                       Text="{Binding IdPergunta}"/>
+                <Label x:Name="idAlternativa"
+                       IsVisible="False" 
+                       Text="{Binding IdAlternativa}"/>
+                
+                <Grid ColumnSpacing="0" 
+                        RowSpacing="0"
+                        BackgroundColor="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.15*" />
+                        <ColumnDefinition Width="0.85*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackLayout BackgroundColor="Transparent"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                                Grid.Column="0" 
+                                Grid.Row="0">
+                        <Label Text="{Binding Letra, FallbackValue=''}"
+                                BackgroundColor="Orange"
+                            FontSize="30" 
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalTextAlignment="Center" 
+                            VerticalTextAlignment="Center"/>
+                    </StackLayout>
+
+                    <StackLayout BackgroundColor="Transparent" 
+                                Padding="10,10"
+                                Grid.Column="1" 
+                                Grid.Row="0">
+                        <Label Text="{Binding Descricao, FallbackValue='Erro ao carregar'}"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalTextAlignment="Start" 
+                            VerticalTextAlignment="Start"/>
+                    </StackLayout>
+                </Grid>
+            </StackLayout>
+        </Frame>
+      
+    </ContentView.Content>
+</ContentView>
