@@ -1,6 +1,11 @@
 ﻿using AppQuestionario.Views;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
+using System;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using System.Collections.Generic;
 
 namespace AppQuestionario
 {
@@ -31,6 +36,10 @@ namespace AppQuestionario
                     { 
                         Title = "Avaliados" 
                     });
+
+            //TODO: Salvar no BD a localização no Login
+            var localizacao = Util.PegarLocalizacao();
+            //DisplayAlert("Localização", localizacao.Result, "Ok");
         }
 
         private async void btnSair_Clicked(object sender, System.EventArgs e)

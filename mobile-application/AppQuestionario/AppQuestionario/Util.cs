@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace AppQuestionario
@@ -45,18 +47,22 @@ namespace AppQuestionario
             throw new NotImplementedException();
         }
 
-        public static string PegarQuestionariosAluno(int idAluno = 1)
+        public static string PegarQuestionariosAluno()
         {
-            string url = $"http://localhost:8080/api/alunos/{idAluno}/questionarios";
+            string url = $"http://localhost:8080/api/alunos/{App.IdAlunoLogado}/questionarios";
 
             //No android o localhost é 10.0.2.2
             if (Device.RuntimePlatform == Device.Android)
             {
-                url = $"http://10.0.2.2:8080/api/alunos/{idAluno}/questionarios";
+                url = $"http://10.0.2.2:8080/api/alunos/{App.IdAlunoLogado}/questionarios";
             }
 
-            WebClient wc = new WebClient();
-            var json = wc.DownloadString(url);
+            string json = "";
+            using (var webClient = new WebClient())
+            {
+                webClient.Headers.Add("Authentication-Token", App.Token);
+                json = webClient.DownloadString(url);
+            }
 
             return json;
         }
@@ -94,6 +100,43 @@ namespace AppQuestionario
                 usuario.Login = "aluno1";
                 usuario.Senha = "aluno123";
                 db.Insert(usuario);
+            }
+        }
+
+        public static async Task<string> PegarLocalizacao()
+        {
+            var location = await Geolocation.GetLastKnownLocationAsync();
+            string retorno = "Não foi possível pegar a localização";
+
+            if (location != null)
+            {
+                retorno = $"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}";
+            }
+
+            return retorno;
+        }
+
+        public static async Task EnviarEmail(string subject, string body, List<string> recipients)
+        {
+            try
+            {
+                var message = new EmailMessage
+                {
+                    Subject = subject,
+                    Body = body,
+                    To = recipients,
+                    //Cc = ccRecipients,
+                    //Bcc = bccRecipients
+                };
+                await Email.ComposeAsync(message);
+            }
+            catch (FeatureNotSupportedException fbsEx)
+            {
+                // Email is not supported on this device
+            }
+            catch (Exception ex)
+            {
+                // Some other exception occurred
             }
         }
     }

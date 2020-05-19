@@ -66,14 +66,14 @@ namespace AppQuestionario
 
             if (strUsuario == usuario?.Login && strSenha == usuario?.Senha)
             {
-                //if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                //{
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
                     App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage() { Title = "Aluno 1" });
-                //}
-                //else
-                //{
-                //    DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
-                //}
+                }
+                else
+                {
+                    DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
+                }
             }
             else
             {
