@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using System.Collections.Generic;
+using AppQuestionario.Models;
 
 namespace AppQuestionario
 {
@@ -39,6 +40,16 @@ namespace AppQuestionario
 
             //TODO: Salvar no BD a localização no Login
             var localizacao = Util.PegarLocalizacao();
+
+            var log = new LogSistema()
+            {
+                Id_Aluno = App.UsuarioLogado.ID_Aluno,
+                Id_TipoLogSistema = TipoLog.Login,
+                Descricao = $"{App.UsuarioLogado.Nome} logou no sistema"
+            };
+
+            Util.SalvarLog(log);
+
             //DisplayAlert("Localização", localizacao.Result, "Ok");
         }
 
@@ -46,7 +57,18 @@ namespace AppQuestionario
         {
             bool sair = await DisplayAlert("Alerta", "Finalizar sessão?", "Sim", "Não");
 
-            if (sair) App.Current.MainPage = new NavigationPage(new MainPage());
+            if (sair)
+            {
+                App.Current.MainPage = new NavigationPage(new MainPage());
+                var log = new LogSistema()
+                {
+                    Id_Aluno = App.UsuarioLogado.ID_Aluno,
+                    Id_TipoLogSistema = TipoLog.Logout,
+                    Descricao = $"{App.UsuarioLogado.Nome} saiu do sistema"
+                };
+
+                Util.SalvarLog(log);
+            }
         }
     }
 }

@@ -20,13 +20,10 @@ namespace AppQuestionario
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
-        public bool rodar { get; private set; }
-
         public MainPage()
         {
             InitializeComponent();
 
-            this.rodar = true;
             BindingContext = this;
         }
 
@@ -50,21 +47,27 @@ namespace AppQuestionario
             Navigation.PushAsync(new ModalCadastrarPage());
         }
 
-        private void Validar()
+        private void Validar(UsuarioModel usuario)
         {
             string dbPath = Path.Combine(
                             Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                             App.NOME_DB);
 
             var db = new SQLiteConnection(dbPath);
-            db.CreateTable<Models.Usuario>();
+            db.CreateTable<Models.UsuarioModel>();
 
             var strUsuario = txtUsuario.Text == null ? "" : txtUsuario.Text.Trim();
             var strSenha = txtSenha.Text == null ? "" : txtSenha.Text.Trim();
 
-            var usuario = db.Query<Usuario>($"SELECT * FROM Usuario WHERE Login = '{strUsuario}'").FirstOrDefault();
+            UsuarioModel usuarioLogin = new UsuarioModel()
+            {
+                Usuario = strUsuario,
+                Senha = strSenha
+            };
 
-            if (strUsuario == usuario?.Login && strSenha == usuario?.Senha)
+            var usuarioDB = db.Query<UsuarioModel>($"SELECT * FROM Usuario WHERE Login = '{strUsuario}'").FirstOrDefault();
+
+            if (strUsuario == usuario?.Usuario && strSenha == usuario?.Senha)
             {
                 if (Connectivity.NetworkAccess == NetworkAccess.Internet)
                 {
@@ -98,8 +101,32 @@ namespace AppQuestionario
                 aiLoad.IsVisible = true;
                 gridLogin.IsEnabled = false;
 
-                await delayTeste();
-                Validar();
+                //await delayTeste();
+                var strUsuario = txtUsuario.Text == null ? "" : txtUsuario.Text.Trim();
+                var strSenha = txtSenha.Text == null ? "" : txtSenha.Text.Trim();
+
+                UsuarioModel usuarioLogin = new UsuarioModel()
+                {
+                    Usuario = strUsuario,
+                    Senha = strSenha
+                };
+
+                var usuarioLogado = await Util.Login(usuarioLogin);
+                //Validar(usuarioLogado);
+
+                if(usuarioLogado == null)
+                {
+                    await DisplayAlert("Aviso", "Usuário ou senha incorreta", "Ok");
+                    btnLogar.IsVisible = true;
+                    aiLoad.IsVisible = false;
+                    gridLogin.IsEnabled = true;
+                    return;
+                }
+                else
+                {
+                    App.UsuarioLogado = usuarioLogado;
+                    App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage() { Title = usuarioLogado.Nome });
+                }
             }
             catch (Exception ex)
             {

@@ -11,10 +11,10 @@ namespace AppQuestionario
         public static readonly string NOME_DB = "questionarios.db3";
 
         //TODO: Deixar id do aluno disponivel
-        public static int IdAlunoLogado 
+        public static Models.UsuarioModel UsuarioLogado
         {
             get;
-            private set;
+            set;
         }
 
         public static string Token
@@ -26,8 +26,6 @@ namespace AppQuestionario
         public App()
         {
             InitializeComponent();
-
-            IdAlunoLogado = 1;
 
             Util.MockUsuarios();
             MainPage = new NavigationPage(new MainPage());

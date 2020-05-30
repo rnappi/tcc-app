@@ -6,10 +6,12 @@ using System.Text;
 namespace AppQuestionario.Models
 {
     [Table("Usuario")]
-    public class Usuario
+    public class UsuarioModel
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
+
+        public int ID_Aluno { get; set; }
 
         [MaxLength(100)]
         public string Nome { get; set; }
@@ -18,9 +20,11 @@ namespace AppQuestionario.Models
         public string Email { get; set; }
 
         [MaxLength(50), Unique]
-        public string Login { get; set; }
+        public string Usuario { get; set; }
 
         [MaxLength(50)]
         public string Senha { get; set; }
+
+        public string AccessToken { get; set; }
     }
 }

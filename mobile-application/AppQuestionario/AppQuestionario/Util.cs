@@ -1,8 +1,12 @@
 ﻿using AppQuestionario.Models;
+using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -12,6 +16,29 @@ namespace AppQuestionario
 {
     public static class Util
     {
+        private static readonly string URI_LOCAL_ANDROID = "http://10.0.2.2:8080/";
+        private static readonly string URI_LOCAL = "http://127.0.1.1:8080/";
+
+        public static async Task<UsuarioModel> Login(UsuarioModel usuario)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP POST - define o objeto
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/auth", usuario);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<UsuarioModel>(json);
+                }
+            }
+
+            return null;
+        }
         public static string PegarQuestionario(int idQuestionario)
         {
             string url = $"http://127.0.0.1:8080/api/questionarios/{idQuestionario}";
@@ -49,12 +76,12 @@ namespace AppQuestionario
 
         public static string PegarQuestionariosAluno()
         {
-            string url = $"http://localhost:8080/api/alunos/{App.IdAlunoLogado}/questionarios";
+            string url = $"http://localhost:8080/api/alunos/{App.UsuarioLogado.ID_Aluno}/questionarios";
 
             //No android o localhost é 10.0.2.2
             if (Device.RuntimePlatform == Device.Android)
             {
-                url = $"http://10.0.2.2:8080/api/alunos/{App.IdAlunoLogado}/questionarios";
+                url = $"http://10.0.2.2:8080/api/alunos/{App.UsuarioLogado.ID_Aluno}/questionarios";
             }
 
             string json = "";
@@ -81,23 +108,23 @@ namespace AppQuestionario
 
             var db = new SQLiteConnection(dbPath);
 
-            db.CreateTable<Models.Usuario>();
+            db.CreateTable<Models.UsuarioModel>();
 
-            var count = db.Table<Models.Usuario>().Count();
+            var count = db.Table<Models.UsuarioModel>().Count();
             if (count == 0)
             {
                 // only insert the data if it doesn't already exist
-                var usuario = new Models.Usuario();
+                var usuario = new Models.UsuarioModel();
                 usuario.Nome = "Admin";
                 usuario.Email = "root@root";
-                usuario.Login = "root";
+                usuario.Usuario = "root";
                 usuario.Senha = "root";
                 db.Insert(usuario);
 
-                usuario = new Models.Usuario();
+                usuario = new Models.UsuarioModel();
                 usuario.Nome = "Aluno 1";
                 usuario.Email = "aluno1@escola.edu";
-                usuario.Login = "aluno1";
+                usuario.Usuario = "aluno1";
                 usuario.Senha = "aluno123";
                 db.Insert(usuario);
             }
@@ -138,6 +165,27 @@ namespace AppQuestionario
             {
                 // Some other exception occurred
             }
+        }
+
+        public static async Task<string> SalvarLog(LogSistema log)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.UsuarioLogado.AccessToken);
+
+                // HTTP POST - define o objeto
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/log", log);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            return null;
         }
     }
 }
