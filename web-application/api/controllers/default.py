@@ -1,23 +1,95 @@
 import api.DAO.questionarioDAO
+from jsonschema import validate
+from datetime import timedelta
+from flask_jwt_extended import (
+    JWTManager, jwt_required,
+    create_access_token, get_raw_jwt
+)
 import api
+
+
+api.app.config['JWT_SECRET_KEY'] = 'ApiQuestionarios-SecretKey'
+api.app.config['JWT_BLACKLIST_ENABLED'] = True
+api.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours = 1)
+jwt = JWTManager(api.app)
+
+schema = {  "type" : "object",
+            "properties" : {
+            "usuario" : {"type" : "string", "minLength": 3, "maxLength": 100},
+            "senha" : {"type" : "string", "minLength": 6, "maxLength": 100},
+            },
+        }
+
+#Guardar tokens revogados
+blacklist = set()
+
+
+@jwt.token_in_blacklist_loader
+def verificar_blacklist(token):
+    #Verifica se o id do token stá na lista
+    return token['jti'] in blacklist
+
+
+@jwt.revoked_token_loader
+def token_invalidado():
+    return api.jsonify({"msg": "Token inválido"}), 401
+
+
+@jwt.expired_token_loader
+def token_expirou(token):
+    return api.jsonify({'msg': f'O token expirou'}), 401
+
+
+@jwt.invalid_token_loader
+def token_invalido(token):
+    return api.jsonify({'msg': f'O token é inválido'}), 401
+
+
+@jwt.unauthorized_loader
+def sem_token_autorizacao(token):
+    return api.jsonify({'msg': f'Não há token no header (bearer)'}), 401
 
 
 #Verificar status da API
 @api.app.route('/', methods=['GET'])
 def statusAPI():
-    return '<html><h1>API Questionarios: Status OK</h1></html>'
+    return '<html><h1>API Questionarios: Status OK</h1></html>', 200
+
+
+@api.app.route('/api/logout', methods=['POST'])
+@jwt_required
+def logout():
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return api.jsonify({"msg": "Logout realizado com sucesso"}), 200
 
 
 #Autentica o usuário
 @api.app.route('/api/auth', methods=['POST'])
 def autenticar():
-    return """{
-                token:'fdg6d6f2g6adg565df4g56d4g6dfg54d45fgfg4d'
-              }"""
+    json = api.request.json
+
+    #if len(json) != 2:
+    #    return api.jsonify({"msg": "Número de parametros diferente de 2", "erro":"Objeto json inválido"}), 409
+
+    try:
+        validate(instance = json, schema=schema)
+    except Exception as e:
+        return api.jsonify({"msg": str(e), "erro": "Objeto json inválido"}), 409
+
+    aluno = api.DAO.questionarioDAO.autenticar(json)
+
+    if aluno:
+        access_token = create_access_token(identity=aluno['id_Aluno'])
+        aluno["AccessToken"] = access_token
+        return api.jsonify(aluno), 200
+
+    return api.jsonify({"msg": "Usuário ou/e senha incorreto(s)", "erro": "Usuário inválido"}), 401
 
 
 #Traz o questionário do ID informado.
-@api.app.route('/api/questionarios/<idQuestionario>', methods=['GET'])
+@api.app.route('/api/questionarios/<int:idQuestionario>', methods=['GET'])
+@jwt_required
 def questionario(idQuestionario):
     args = api.request.args
     print(args)
@@ -25,7 +97,8 @@ def questionario(idQuestionario):
 
 
 #Traz o aluno do ID informado.
-@api.app.route('/api/alunos/<id_aluno>', methods=['GET'])
+@api.app.route('/api/alunos/<int:id_aluno>', methods=['GET'])
+@jwt_required
 def questionariosAluno(id_aluno):
     return """{
                 nome:'Aluno 1'
@@ -33,13 +106,15 @@ def questionariosAluno(id_aluno):
 
 
 #Traz os questionários do aluno informado
-@api.app.route('/api/alunos/<id_aluno>/questionarios', methods=['GET'])
+@api.app.route('/api/alunos/<int:id_aluno>/questionarios', methods=['GET'])
+@jwt_required
 def questionarioAluno(id_aluno):
     return api.DAO.questionarioDAO.pegarQuestionariosAluno(id_aluno)
 
 
 #Lista as tentativas do aluno podendo filtrar por questionarios
-@api.app.route('/api/alunos/<id_aluno>/tentativas/questionario/<id_questionario>', methods=['GET'])
+@api.app.route('/api/alunos/<int:id_aluno>/tentativas/questionario/<int:id_questionario>', methods=['GET'])
+@jwt_required
 def tentativasAluno(id_questionario):
     return """{
                 idTentativa:'102'
@@ -47,7 +122,8 @@ def tentativasAluno(id_questionario):
 
 
 #Traz uma tentativa específica
-@api.app.route('/api/tentativas/<id_tentativa>', methods=['GET'])
+@api.app.route('/api/tentativas/<int:id_tentativa>', methods=['GET'])
+@jwt_required
 def tentativaAluno(id_tentativa):
     return """{
                 idTentativa:'102'
@@ -56,6 +132,7 @@ def tentativaAluno(id_tentativa):
 
 #Cria uma nova tentativa
 @api.app.route('/api/tentativas/', methods=['POST'])
+@jwt_required
 def criarTentativa():
     return """{
                 idTentativa:'102'
@@ -63,7 +140,8 @@ def criarTentativa():
 
 
 #Grava uma resposta para uma tentativa
-@api.app.route('/api/tentativas/<id_tentativa>/respostas', methods=['POST'])
+@api.app.route('/api/tentativas/<int:id_tentativa>/respostas', methods=['POST'])
+@jwt_required
 def gravarTentativa():
     return """{
                 idResposta:'102'
@@ -75,4 +153,17 @@ def gravarTentativa():
 def verificarMaterial():
     json = api.request.json
     resp = api.DAO.questionarioDAO.indicarMaterial(json)
-    return api.Response(resp, mimetype='text/json')
+    return api.Response(resp, mimetype='text/json'), 200
+
+
+#Salva o log no sistema.
+@api.app.route('/api/log', methods=['POST'])
+@jwt_required
+def salvarLog():
+    try:
+        json = api.request.json
+        resp = api.DAO.questionarioDAO.salvarLog(json)
+        return api.Response(resp, mimetype='text/json'), 200
+    except Exception as e:
+        resp = f'{{"msg": "Erro ao salvar log: {str(e)}"}}'
+        return api.Response(resp, mimetype='text/json'), 500

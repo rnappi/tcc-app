@@ -1,7 +1,47 @@
 import mysql.connector
 import api
+from flask_bcrypt  import Bcrypt
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
+from datetime import datetime
+
+
+bcrypt = Bcrypt(api.app)
+
+
+def autenticar(json):
+    cnx = mysql.connector.connect(user='root', password='root',
+                                  host='127.0.0.1',
+                                  database='Questionarios')
+
+    cursor = cnx.cursor()
+    aluno = {}
+
+    try:
+        query = """select * 
+                     from alunos as a
+                    where a.usuario = %s
+                      and a.senha = %s """
+
+        params = (json['Usuario'], json['Senha'])
+
+        cursor.execute(query, params)
+        
+        for result in cursor:
+            aluno = { 'id_Aluno': result[0], 
+                      'nome': result[1],
+                      'usuario': result[2],
+                      'email': result[4],
+                      'data_cadastro': result[5],
+                      'data_ultima_atualizacao': result[6]}
+
+    except Exception as e:
+        cnx.rollback()
+        print('Erro ao autenticar usuário: ' + str(e))
+
+    cursor.close()
+    cnx.close()
+    return aluno
 
 
 def pegarQuestionarios(idQuestionario):
@@ -10,6 +50,7 @@ def pegarQuestionarios(idQuestionario):
                                 database='Questionarios')
 
     cursor = cnx.cursor()
+    resp = {}
 
     try:
         query = """select q.id_Questionario,
@@ -21,10 +62,12 @@ def pegarQuestionarios(idQuestionario):
                           a.Alternativa_Correta
                      from questionarios q
                      join perguntas p on p.id_Questionario = q.id_Questionario
-                     join alternativas a on a.id_Pergunta = p.id_Pergunta """
+                     join alternativas a on a.id_Pergunta = p.id_Pergunta 
+                     where q.id_Questionario = %s """
+        
+        params = (int(idQuestionario),) #A virgula é para indicar que é uma tupla
 
-        query += f"where q.id_Questionario = {idQuestionario}"
-        cursor.execute(query)
+        cursor.execute(query, params)
 
         payload = []
         content = {}
@@ -39,7 +82,7 @@ def pegarQuestionarios(idQuestionario):
 
             payload.append(content)
 
-        r = api.jsonify(payload)
+        resp = api.jsonify(payload)
 
     except Exception as e:
         cnx.rollback()
@@ -47,7 +90,7 @@ def pegarQuestionarios(idQuestionario):
 
     cursor.close()
     cnx.close()
-    return r
+    return resp
 
 
 def pegarQuestionariosAluno(idAluno):
@@ -56,6 +99,7 @@ def pegarQuestionariosAluno(idAluno):
                                 database='Questionarios')
 
     cursor = cnx.cursor()
+    resp = {}
 
     try:
         query = """select q.id_Questionario,
@@ -67,10 +111,8 @@ def pegarQuestionariosAluno(idAluno):
 					                   group by a.id_Pergunta
                                           limit 1) qtdAlternativas,
                           q.Nome as NomeQuestionario
-                     from questionarios q; """
+                     from questionarios q"""
 
-        # query += f"where q.id_Questionario = {idAluno}"
-        
         cursor.execute(query)
 
         payload = []
@@ -83,7 +125,7 @@ def pegarQuestionariosAluno(idAluno):
 
             payload.append(content)
 
-        r = api.jsonify(payload)
+        resp = api.jsonify(payload)
 
     except Exception as e:
         cnx.rollback()
@@ -91,7 +133,14 @@ def pegarQuestionariosAluno(idAluno):
 
     cursor.close()
     cnx.close()
-    return r
+    return resp
+
+
+def inserirAluno(json):
+    pw_hash = bcrypt.generate_password_hash('hunter2')
+    check = bcrypt.check_password_hash(pw_hash, 'hunter2')
+
+    print(pw_hash, check)
 
 
 def indicarMaterial(json):
@@ -100,12 +149,14 @@ def indicarMaterial(json):
                                 database='Questionarios')
 
     cursor = cnx.cursor()
-    r = ""
+    resp = ""
 
     try:
-        query = F"""select Combinacao from view_material_indicado where id_Questionario = {json['questionario']}"""
+        query = """select Combinacao from view_material_indicado where id_Questionario = %s"""
 
-        cursor.execute(query)
+        params = (int(json['questionario']), )
+
+        cursor.execute(query, params)
 
         payload = []
         qtdPerguntas = 0 #Guarda a quantidade de perguntas do questionario
@@ -129,7 +180,7 @@ def indicarMaterial(json):
         y = base[qtdPerguntas] #Pega apenas as classes material
 
         #Cria o classificador e passa o k
-        knn = KNeighborsClassifier(n_neighbors=1)
+        knn = KNeighborsClassifier(n_neighbors=5)
 
         #Pega a base de treinamento
         knn.fit(x,y)
@@ -139,13 +190,47 @@ def indicarMaterial(json):
 
         mat = knn.predict(classificar)
 
-        r = f'{{"material":{mat[0]}}}'
+        resp = f'{{"material":{mat[0]}}}'
 
     except Exception as e:
         cnx.rollback()
         print('Erro na conexão com o BD: ' + str(e))
-        r = f'{{"Erro":"{str(e)}"}}'
+        resp = f'{{"Erro":"{str(e)}"}}'
 
     cursor.close()
     cnx.close()
-    return r
+
+    return resp
+
+
+def salvarLog(json):
+    cnx = mysql.connector.connect(user='root', password='root',
+                            host='127.0.0.1',
+                            database='Questionarios')
+
+    cursor = cnx.cursor()
+    resp = ""
+
+    try:        
+        query = """insert into log_sistema (id_Aluno, id_TipoLogSistema, descricao, data_cadastro) values (%s, %s, %s, NOW());"""
+
+        params = (int(json['Id_Aluno']), int(json['Id_TipoLogSistema']), json['Descricao'])
+
+        cursor.execute(query, params)
+
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        resp = f'{{"msg":"Log gerado com sucesso, {dt_string}"}}'
+
+    except Exception as e:
+        cnx.rollback()
+        cursor.close()
+        cnx.close()
+        print('Erro na conexão com o BD: ' + str(e))
+        raise Exception(str(e))
+
+    cursor.close()
+    cnx.commit()
+    cnx.close()
+
+    return resp
