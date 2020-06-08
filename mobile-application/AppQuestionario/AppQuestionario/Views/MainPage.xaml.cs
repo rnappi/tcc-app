@@ -136,6 +136,7 @@ namespace AppQuestionario
             {
                 btnLogar.IsVisible = true;
                 aiLoad.IsVisible = false;
+                gridLogin.IsEnabled = true;
             }
         }
     }
