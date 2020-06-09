@@ -31,13 +31,6 @@ namespace AppQuestionario
                         Title = "Respondidos" 
                     });
 
-            Children.Add(
-                
-                    new ItensAvaliadosPage() 
-                    { 
-                        Title = "Avaliados" 
-                    });
-
             //TODO: Salvar no BD a localização no Login
             var localizacao = Util.PegarLocalizacao();
 

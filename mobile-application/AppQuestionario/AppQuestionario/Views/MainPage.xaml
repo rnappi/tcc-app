@@ -9,7 +9,6 @@
              x:Class="AppQuestionario.MainPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="btnConfig" Text="Configurações" IconImageSource="config32.png" Clicked="btnConfig_Clicked" />
         <ToolbarItem x:Name="btnSair" Text="Sair" IconImageSource="close32.png" Clicked="btnSair_Clicked" />
     </ContentPage.ToolbarItems>
 
@@ -96,18 +95,6 @@
                                 ForegroundColor="White"
                                 BackgroundColor="#f44336"
                                 HighlightBackgroundColor="#f40000"/>
-                        </StackLayout>
-
-                        <StackLayout HorizontalOptions="Center" Margin="0,10">
-                            <controls:FlexButton
-                                x:Name="btnEsqueceuSenha"
-                                Text="Esqueceu sua senha?"
-                                BackgroundColor="Transparent"
-                                ForegroundColor="Black"
-                                HighlightForegroundColor="Gray"
-                                FontAttributes="Bold"
-                                Clicked="btnEsqueceuSenha_Clicked"
-                                HorizontalOptions="Center"/>
                         </StackLayout>
 
                     </StackLayout>
