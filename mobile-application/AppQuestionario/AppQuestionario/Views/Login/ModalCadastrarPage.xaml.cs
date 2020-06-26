@@ -67,6 +67,12 @@ namespace AppQuestionario.Views.Login
 
                     var respJSON = await Util.CriarUsuario(usuario);
 
+                    if (respJSON == null)
+                    {
+                        await DisplayAlert("Erro", "Não foi possível acessar o servidor, tente mais tarde", "Ok");
+                        return;
+                    }
+
                     RespostaAPI respostaAPI = JsonConvert.DeserializeObject<RespostaAPI>(respJSON);
 
                     await App.Current.MainPage.DisplayAlert("Cadastro", respostaAPI.Msg, "Ok");

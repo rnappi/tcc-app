@@ -31,7 +31,15 @@ namespace AppQuestionario
                         Title = "Respondidos" 
                     });
 
-            var localizacao = Util.PegarLocalizacao().Result;
+            string localizacao = "";
+            try
+            {
+                localizacao = Util.PegarLocalizacao().Result;
+            }
+            catch (Exception)
+            {
+                localizacao = "Latitude: 0, Longitude: 0, Altitude: 0";
+            }
 
             var log = new LogSistema()
             {
@@ -61,12 +69,23 @@ namespace AppQuestionario
             if (sair)
             {
                 App.Current.MainPage = new NavigationPage(new MainPage());
+
+                string localizacao = "";
+                try
+                {
+                    localizacao = Util.PegarLocalizacao().Result;
+                }
+                catch (Exception)
+                {
+                    localizacao = "Latitude: 0, Longitude: 0, Altitude: 0";
+                }
+
                 var log = new LogSistema()
                 {
                     Id_Aluno = App.UsuarioLogado.ID_Aluno,
                     Id_TipoLogSistema = TipoLog.Logout,
                     Descricao = $"{App.UsuarioLogado.Nome} saiu do sistema",
-                    Localizacao = Util.PegarLocalizacao().Result
+                    Localizacao = localizacao
                 };
 
                 await Util.SalvarLog(log);

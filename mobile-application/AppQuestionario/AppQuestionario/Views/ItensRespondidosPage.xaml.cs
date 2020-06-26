@@ -128,7 +128,7 @@ namespace AppQuestionario.Views
                         },
                         new Label
                         {
-                            Text = $"Acertos {questionario.QtdAcertos} de {questionario.QtdPerguntas} perguntas"
+                            Text = $"Acertos na última tentativa {questionario.QtdAcertos} de {questionario.QtdPerguntas} perguntas"
                         }
                     }
                 }

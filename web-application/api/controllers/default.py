@@ -116,6 +116,13 @@ def questionarioAluno(id_aluno):
     return resp
 
 
+@api.app.route('/api/alunos/<int:id_aluno>/questionarios', methods=['POST'])
+@jwt_required
+def questionarioAlunoPost(id_aluno):
+    resp = api.DAO.questionarioDAO.pegarQuestionariosAluno(id_aluno)
+    return resp   
+
+
 #Lista as tentativas do aluno podendo filtrar por questionarios
 @api.app.route('/api/alunos/<int:id_aluno>/tentativas/questionario/<int:id_questionario>', methods=['GET'])
 @jwt_required

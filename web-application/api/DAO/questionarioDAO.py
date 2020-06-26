@@ -10,12 +10,25 @@ from api.Utils import util
 bcrypt = Bcrypt(api.app)
 
 
+def pegarConexaoPW():
+    cnx = mysql.connector.connect(user='apiquestionarios', password='Root@2020',
+                              host='apiquestionarios.mysql.pythonanywhere-services.com',
+                              database='apiquestionarios$db')
+    return cnx
+
+
+def pegarConexao():
+    cnx = mysql.connector.connect( user='root', 
+                                   password='root',
+                                   host='127.0.0.1',
+                                   database='Questionarios')
+    return cnx
+
+
 def autenticar(json):
 
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -53,9 +66,7 @@ def autenticar(json):
 
 def pegarQuestionarios(idQuestionario):
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -108,9 +119,7 @@ def pegarQuestionarios(idQuestionario):
 
 def pegarQuestionariosAluno(idAluno):
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -121,7 +130,7 @@ def pegarQuestionariosAluno(idAluno):
     resp = {}
 
     try:
-        query = """select q.id_Questionario,
+        query = """SELECT q.id_Questionario,
                           p.id_Pergunta,
                           a.id_Alternativa,
                           q.Nome as nomeQuestionario,
@@ -153,9 +162,9 @@ def pegarQuestionariosAluno(idAluno):
 													  from tentativas te
 													 where te.id_Aluno = t.id_Aluno 
 													   and te.id_Questionario = t.id_Questionario)) qtdAcertos
-                     from questionarios q
-                     join perguntas p on p.id_Questionario = q.id_Questionario
-                     join alternativas a on a.id_Pergunta = p.id_Pergunta"""
+                     FROM questionarios q
+                     JOIN perguntas p on p.id_Questionario = q.id_Questionario
+                     JOIN alternativas a on a.id_Pergunta = p.id_Pergunta"""
 
         params = (idAluno, idAluno)
 
@@ -196,9 +205,7 @@ def inserirAluno(json):
     #check = bcrypt.check_password_hash(pw_hash, 'hunter2')
 
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -234,9 +241,7 @@ def inserirAluno(json):
 
 def indicarMaterial(json):
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -299,9 +304,7 @@ def indicarMaterial(json):
 
 def salvarLog(json):
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -338,9 +341,7 @@ def salvarLog(json):
 def salvarQuestionarioRespondido(json):
     
     try:
-        cnx = mysql.connector.connect(user='root', password='root',
-                                      host='127.0.0.1',
-                                      database='Questionarios')
+        cnx = pegarConexao()
     except Exception as e:
         erroBD = 'Erro ao conectar no banco, ' + str(e)
         print(erroBD)
@@ -406,3 +407,5 @@ def salvarQuestionarioRespondido(json):
     cnx.close()
 
     return resp
+
+    

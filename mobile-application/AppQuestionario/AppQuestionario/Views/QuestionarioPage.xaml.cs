@@ -132,6 +132,12 @@ namespace AppQuestionario.Views
                     this.IsEnabled = false;
                     var json = await Util.SalvarQuestionariosAluno(respostasQuestionario);
 
+                    if(json == null)
+                    {
+                        await DisplayAlert("Erro", "Não foi possível acessar o servidor, tente mais tarde", "Ok");
+                        return;
+                    }
+
                     var respAPI = JsonConvert.DeserializeObject<RespostaAPI>(json);
 
                     var listaQuestionarioAtual = App.ListaQuestionarios.FindAll(f => f.IdQuestionario == idQuestionarioCarregado);
