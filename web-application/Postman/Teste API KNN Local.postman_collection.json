@@ -9,14 +9,7 @@
 			"name": "/api/questionarios",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg1NTU3NDMsIm5iZiI6MTU4ODU1NTc0MywianRpIjoiYzQ5YzM5ZmYtYjg0Yi00YjQ5LThlNGItMmZjY2Y5ZGIxYzg2IiwiZXhwIjoxNTg4NTU2NjQzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.fAo7LrOqCXYwyK30AgWrfA--lRW1MKHk6MGir0HK-eE",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [
@@ -29,7 +22,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"questionario\" : 1,\n\t\"cp\":[1,0,0,0,1,1,1,1,0,0,1,1]\n}",
+					"raw": "{\n\t\"questionario\" : 1,\n\t\"cp\":[1,1,1,1,1,1,1,1,1,1,1,1]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,7 +61,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"usuario\" : \"aluno1\",\n\t\"senha\":\"aluno123\"\n}",
+					"raw": "{\n\t\"Usuario\" : \"aluno1\",\n\t\"Senha\":\"aluno123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -96,6 +89,16 @@
 		{
 			"name": "/api/logout",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg1NTU3NDMsIm5iZiI6MTU4ODU1NTc0MywianRpIjoiYzQ5YzM5ZmYtYjg0Yi00YjQ5LThlNGItMmZjY2Y5ZGIxYzg2IiwiZXhwIjoxNTg4NTU2NjQzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.fAo7LrOqCXYwyK30AgWrfA--lRW1MKHk6MGir0HK-eE",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -107,7 +110,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"usuario\" : \"aluno1\",\n\t\"senha\":\"aluno123\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,7 +118,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/auth",
+					"raw": "http://127.0.0.1:8080/api/logout",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -126,7 +129,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"auth"
+						"logout"
 					]
 				}
 			},
@@ -135,6 +138,16 @@
 		{
 			"name": "/api/log",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTI5NjgwOTMsIm5iZiI6MTU5Mjk2ODA5MywianRpIjoiN2MxNDk5NDEtZTlhMS00NTFhLWI4NDktMjYxY2U2MTc2MTFjIiwiZXhwIjoxNTkzMDExMjkzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ocoTsUwPy-DFfJAqIOEXL4liWEVcodD_Cba5CxKXznM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -146,7 +159,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"usuario\" : \"aluno1\",\n\t\"senha\":\"aluno123\"\n}",
+					"raw": "{\n\t\"id_Aluno\": 1,\n\t\"id_TipoLogSistema\": 1,\n\t\"descricao\": \"Teste de login\",\n\t\"localizacao\": \"fdsf145s6d4f56sd4fsd64f\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -172,8 +185,110 @@
 			"response": []
 		},
 		{
-			"name": "/api/questionarios/<id_Questionario>",
+			"name": "/api/usuario/aluno",
 			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\" : \"Ana Maria\",\n\t\"email\":\"ana.maria@escola.edu\",\n\t\"usuario\":\"ana\",\n\t\"senha\":\"ana123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/usuario/aluno",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"usuario",
+						"aluno"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/tentativas",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTI5NjgwOTMsIm5iZiI6MTU5Mjk2ODA5MywianRpIjoiN2MxNDk5NDEtZTlhMS00NTFhLWI4NDktMjYxY2U2MTc2MTFjIiwiZXhwIjoxNTkzMDExMjkzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ocoTsUwPy-DFfJAqIOEXL4liWEVcodD_Cba5CxKXznM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id_Aluno\" : 1,\n\t\"id_Questionario\" : 1,\n\t\"respostas\" : [2,5,9,16,17,22,27,29,35,38,41,47]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/tentativas",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tentativas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/questionarios/<id_Questionario>",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg5MDM3NzgsIm5iZiI6MTU4ODkwMzc3OCwianRpIjoiY2U1YzdhZGEtOTQ5Ny00NzU4LWI2OTEtYjFkYTIyNjMzMWY4IiwiZXhwIjoxNTg4OTA3Mzc4LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.kUDKDNedw5KqAk6--WfxofqmuZXG6WvV4qZLotFxu34",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -184,10 +299,19 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg1MzU5NzcsIm5iZiI6MTU4ODUzNTk3NywianRpIjoiMjM5MDVjY2YtZWE5OC00Y2NmLWJhMjYtMjA2MmNhOWJlMDgxIiwiZXhwIjoxNTg4NTM2ODc3LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.J2WzgY60pSNKpAGgVLN-tcvCLZ6eq-vzE3ub30c6eWQ",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg1NTU3NDMsIm5iZiI6MTU4ODU1NTc0MywianRpIjoiYzQ5YzM5ZmYtYjg0Yi00YjQ5LThlNGItMmZjY2Y5ZGIxYzg2IiwiZXhwIjoxNTg4NTU2NjQzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.fAo7LrOqCXYwyK30AgWrfA--lRW1MKHk6MGir0HK-eE",
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://127.0.0.1:8080/api/questionarios/1",
 					"protocol": "http",
@@ -210,6 +334,16 @@
 		{
 			"name": "/api/alunos/<id_aluno>/questionarios",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTI5NjgwOTMsIm5iZiI6MTU5Mjk2ODA5MywianRpIjoiN2MxNDk5NDEtZTlhMS00NTFhLWI4NDktMjYxY2U2MTc2MTFjIiwiZXhwIjoxNTkzMDExMjkzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.ocoTsUwPy-DFfJAqIOEXL4liWEVcodD_Cba5CxKXznM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -225,7 +359,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/questionarios/1",
+					"raw": "http://127.0.0.1:8080/api/alunos/1/questionarios",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -236,8 +370,9 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"questionarios",
-						"1"
+						"alunos",
+						"1",
+						"questionarios"
 					]
 				}
 			},

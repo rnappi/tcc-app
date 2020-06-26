@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"usuario\" : \"aluno1\",\n\t\"senha\"   : \"aluno123\"\n}",
+					"raw": "{\n\t\"Usuario\" : \"aluno1\",\n\t\"Senha\"   : \"aluno123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,7 +50,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg5MDc0MDksIm5iZiI6MTU4ODkwNzQwOSwianRpIjoiNmQwZjQxZjQtZjJiMi00ZWFjLTg0MjItMmQ1NmQxM2IxY2JmIiwiZXhwIjoxNTg4OTExMDA5LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.9gdOM9oSxwhezC8j9_umpFh0hWTYWDAYaYtBzgnyoNs",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTAzMjc0MDksIm5iZiI6MTU5MDMyNzQwOSwianRpIjoiZjBkMmUwNGMtZDAyZC00N2RiLTk2MzQtNDFhMzY4NTA4ZTA3IiwiZXhwIjoxNTkwMzMxMDA5LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.hpkbp2P0d3QxvC2aPJmoDadO7VarLwwfW7LWRYxrchk",
 							"type": "string"
 						}
 					]
@@ -90,6 +90,53 @@
 			"response": []
 		},
 		{
+			"name": "/api/log",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTMyMDMxODQsIm5iZiI6MTU5MzIwMzE4NCwianRpIjoiYzYyZDQ1MDAtNTVkMS00OTMwLTliMjgtNTFlMTA2N2MzN2Y2IiwiZXhwIjoxNTkzMjI0Nzg0LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.Al43xr7VcGm6PEU4Cp-cCB2l_k-Qw7hvwSzub3yTczE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id_Aluno\": 1,\n\t\"id_TipoLogSistema\": 1,\n\t\"descricao\": \"Teste de login\",\n\t\"localizacao\": \"fdsf145s6d4f56sd4fsd64f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://apiquestionarios.pythonanywhere.com/api/log",
+					"protocol": "https",
+					"host": [
+						"apiquestionarios",
+						"pythonanywhere",
+						"com"
+					],
+					"path": [
+						"api",
+						"log"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/api/questionarios/<id_Questionario>",
 			"request": {
 				"auth": {
@@ -97,7 +144,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg5MDc0MDksIm5iZiI6MTU4ODkwNzQwOSwianRpIjoiNmQwZjQxZjQtZjJiMi00ZWFjLTg0MjItMmQ1NmQxM2IxY2JmIiwiZXhwIjoxNTg4OTExMDA5LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.9gdOM9oSxwhezC8j9_umpFh0hWTYWDAYaYtBzgnyoNs",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTMxOTAzMDMsIm5iZiI6MTU5MzE5MDMwMywianRpIjoiM2MxNGIyODUtMzkyNi00M2UzLWEwMmMtYjFiNTliMzM0NDEzIiwiZXhwIjoxNTkzMTkzOTAzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.CfApSRMuajK_1oJz9durUtTEtLWYnQnkAEJ6ENpxPkw",
 							"type": "string"
 						}
 					]
@@ -123,6 +170,51 @@
 						"api",
 						"questionarios",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/alunos/<id_aluno>/questionarios",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTMxOTAzMDMsIm5iZiI6MTU5MzE5MDMwMywianRpIjoiM2MxNGIyODUtMzkyNi00M2UzLWEwMmMtYjFiNTliMzM0NDEzIiwiZXhwIjoxNTkzMTkzOTAzLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.CfApSRMuajK_1oJz9durUtTEtLWYnQnkAEJ6ENpxPkw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODg1MzU5NzcsIm5iZiI6MTU4ODUzNTk3NywianRpIjoiMjM5MDVjY2YtZWE5OC00Y2NmLWJhMjYtMjA2MmNhOWJlMDgxIiwiZXhwIjoxNTg4NTM2ODc3LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.J2WzgY60pSNKpAGgVLN-tcvCLZ6eq-vzE3ub30c6eWQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://apiquestionarios.pythonanywhere.com/api/alunos/1/questionarios",
+					"protocol": "https",
+					"host": [
+						"apiquestionarios",
+						"pythonanywhere",
+						"com"
+					],
+					"path": [
+						"api",
+						"alunos",
+						"1",
+						"questionarios"
 					]
 				}
 			},
