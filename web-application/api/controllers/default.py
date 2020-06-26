@@ -10,7 +10,7 @@ import api
 
 api.app.config['JWT_SECRET_KEY'] = 'ApiQuestionarios-SecretKey'
 api.app.config['JWT_BLACKLIST_ENABLED'] = True
-api.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours = 1)
+api.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours = 12)
 jwt = JWTManager(api.app)
 
 schema = {  "type" : "object",
@@ -77,7 +77,10 @@ def autenticar():
     except Exception as e:
         return api.jsonify({"msg": str(e), "erro": "Objeto json inválido"}), 409
 
-    aluno = api.DAO.questionarioDAO.autenticar(json)
+    try:
+        aluno = api.DAO.questionarioDAO.autenticar(json)
+    except Exception as e:
+        return api.jsonify({"status": 0, "msg": str(e)}), 501
 
     if aluno:
         access_token = create_access_token(identity=aluno['id_Aluno'])
@@ -109,7 +112,8 @@ def questionariosAluno(id_aluno):
 @api.app.route('/api/alunos/<int:id_aluno>/questionarios', methods=['GET'])
 @jwt_required
 def questionarioAluno(id_aluno):
-    return api.DAO.questionarioDAO.pegarQuestionariosAluno(id_aluno)
+    resp = api.DAO.questionarioDAO.pegarQuestionariosAluno(id_aluno)
+    return resp
 
 
 #Lista as tentativas do aluno podendo filtrar por questionarios
@@ -131,12 +135,20 @@ def tentativaAluno(id_tentativa):
 
 
 #Cria uma nova tentativa
-@api.app.route('/api/tentativas/', methods=['POST'])
+@api.app.route('/api/tentativas', methods=['POST'])
 @jwt_required
 def criarTentativa():
-    return """{
-                idTentativa:'102'
-              }"""
+    try:
+        json = api.request.json
+
+        #validarJsonQuestionarioRespondido(json)
+
+        resp = api.DAO.questionarioDAO.salvarQuestionarioRespondido(json)
+        return api.Response(resp, mimetype='text/json'), 200
+
+    except Exception as e:
+        resp = f'{{"status": 0, "msg": "Erro ao salvar questionário: {str(e)}"}}'
+        return api.Response(resp, mimetype='text/json'), 500
 
 
 #Grava uma resposta para uma tentativa
@@ -165,5 +177,39 @@ def salvarLog():
         resp = api.DAO.questionarioDAO.salvarLog(json)
         return api.Response(resp, mimetype='text/json'), 200
     except Exception as e:
-        resp = f'{{"msg": "Erro ao salvar log: {str(e)}"}}'
+        resp = f'{{"status":0, "msg": "Erro ao salvar log: {str(e)}"}}'
         return api.Response(resp, mimetype='text/json'), 500
+
+schemaUsuario = {  "type" : "object",
+                   "properties" : {
+                      "Nome" : {"type" : "string", "minLength": 5, "maxLength": 100},
+                      "Email" : {"type" : "string", "minLength": 10, "maxLength": 150},
+                      "Usuario" : {"type" : "string", "minLength": 3, "maxLength": 150},
+                      "Senha" : {"type" : "string", "minLength": 6, "maxLength": 50}
+                   },
+                }
+
+def validarJsonUsuario(json):
+    if len(json) != 4:
+        raise Exception("Número de parametros diferente de 4, objeto json inválido")
+
+    try:
+        validate(instance = json, schema=schemaUsuario)
+    except Exception as e:
+        raise Exception("JSON Inválido, verifique as propriedades")
+
+
+#Inserir novo aluno no sistema
+@api.app.route('/api/usuario/aluno', methods=['POST'])
+def cadastrarNovoAluno():
+    try:
+        json = api.request.json
+
+        validarJsonUsuario(json)
+
+        resp = api.DAO.questionarioDAO.inserirAluno(json)
+        return api.Response(resp, mimetype='text/json'), 200
+    except Exception as e:
+        resp = f'{{"status": 0, "msg": "Erro ao cadastrar: {str(e)}"}}'
+        return api.Response(resp, mimetype='text/json'), 500
+
