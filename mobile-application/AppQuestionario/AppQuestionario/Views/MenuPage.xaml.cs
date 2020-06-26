@@ -13,7 +13,7 @@ namespace AppQuestionario
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MenuPage : TabbedPage
     {
-        public MenuPage()
+        public MenuPage(string mensagem = "")
         {
             InitializeComponent();
 
@@ -31,19 +31,27 @@ namespace AppQuestionario
                         Title = "Respondidos" 
                     });
 
-            //TODO: Salvar no BD a localização no Login
-            var localizacao = Util.PegarLocalizacao();
+            var localizacao = Util.PegarLocalizacao().Result;
 
             var log = new LogSistema()
             {
                 Id_Aluno = App.UsuarioLogado.ID_Aluno,
                 Id_TipoLogSistema = TipoLog.Login,
-                Descricao = $"{App.UsuarioLogado.Nome} logou no sistema"
+                Descricao = $"{App.UsuarioLogado.Nome} logou no sistema",
+                Localizacao = localizacao
             };
 
-            Util.SalvarLog(log);
+            GerarLog(log);
 
-            //DisplayAlert("Localização", localizacao.Result, "Ok");
+            if (!string.IsNullOrEmpty(mensagem))
+            {
+                DisplayAlert("Questionario respondido com sucesso", mensagem, "OK");
+            }
+        }
+
+        private async void GerarLog(LogSistema log)
+        {
+            await Util.SalvarLog(log);
         }
 
         private async void btnSair_Clicked(object sender, System.EventArgs e)
@@ -57,10 +65,11 @@ namespace AppQuestionario
                 {
                     Id_Aluno = App.UsuarioLogado.ID_Aluno,
                     Id_TipoLogSistema = TipoLog.Logout,
-                    Descricao = $"{App.UsuarioLogado.Nome} saiu do sistema"
+                    Descricao = $"{App.UsuarioLogado.Nome} saiu do sistema",
+                    Localizacao = Util.PegarLocalizacao().Result
                 };
 
-                Util.SalvarLog(log);
+                await Util.SalvarLog(log);
             }
         }
     }

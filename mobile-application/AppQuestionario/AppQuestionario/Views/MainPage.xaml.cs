@@ -1,5 +1,6 @@
 ﻿using AppQuestionario.Models;
 using AppQuestionario.Views.Login;
+using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -44,64 +45,29 @@ namespace AppQuestionario
 
         private void btnCadastrar_Clicked(object sender, EventArgs e)
         {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                DisplayAlert("Sem acesso a internet", "Não é possível realizar cadastro sem acesso a internet", "Ok");
+                return;
+            }
+
             Navigation.PushAsync(new ModalCadastrarPage());
-        }
-
-        private void Validar(UsuarioModel usuario)
-        {
-            string dbPath = Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                            App.NOME_DB);
-
-            var db = new SQLiteConnection(dbPath);
-            db.CreateTable<Models.UsuarioModel>();
-
-            var strUsuario = txtUsuario.Text == null ? "" : txtUsuario.Text.Trim();
-            var strSenha = txtSenha.Text == null ? "" : txtSenha.Text.Trim();
-
-            UsuarioModel usuarioLogin = new UsuarioModel()
-            {
-                Usuario = strUsuario,
-                Senha = strSenha
-            };
-
-            var usuarioDB = db.Query<UsuarioModel>($"SELECT * FROM Usuario WHERE Login = '{strUsuario}'").FirstOrDefault();
-
-            if (strUsuario == usuario?.Usuario && strSenha == usuario?.Senha)
-            {
-                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-                {
-                    App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage() { Title = "Aluno 1" });
-                }
-                else
-                {
-                    DisplayAlert("Aviso", "Sem acesso a internet", "Ok");
-                }
-            }
-            else
-            {
-                DisplayAlert("Aviso", "Usuário ou senha incorreta", "Ok");
-            }
-
-            btnLogar.IsVisible = true;
-            aiLoad.IsVisible = false;
-            gridLogin.IsEnabled = true;
-        }
-
-        private async Task delayTeste()
-        {
-            await Task.Delay(1000);
         }
 
         private async void btnLogar_Clicked(object sender, EventArgs e)
         {
             try
             {
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                {
+                    await DisplayAlert("Sem acesso a internet", "Não é possível utilizar o aplicativo sem acesso a internet", "Ok");
+                    return;
+                }
+
                 btnLogar.IsVisible = false;
                 aiLoad.IsVisible = true;
                 gridLogin.IsEnabled = false;
-
-                //await delayTeste();
+                
                 var strUsuario = txtUsuario.Text == null ? "" : txtUsuario.Text.Trim();
                 var strSenha = txtSenha.Text == null ? "" : txtSenha.Text.Trim();
 
@@ -125,6 +91,20 @@ namespace AppQuestionario
                 else
                 {
                     App.UsuarioLogado = usuarioLogado;
+
+                    var json = Util.PegarQuestionariosAluno().Result;
+                    //var json = Util.MockPegarQuestionariosAluno();
+
+                    if (json != null)
+                    {
+                        App.ListaQuestionarios = JsonConvert.DeserializeObject<List<DescricaoQuestionario>>(json);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Erro", "Erro ao buscar dados na API, tente mais tarde.", "Ok");
+                        return;
+                    }
+
                     App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage() { Title = usuarioLogado.Nome });
                 }
             }

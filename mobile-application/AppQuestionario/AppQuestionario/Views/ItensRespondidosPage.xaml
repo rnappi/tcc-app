@@ -7,12 +7,11 @@
              x:Class="AppQuestionario.Views.ItensRespondidosPage"
              Title="Respondidos">
     <ContentPage.Content>
-        <StackLayout BackgroundColor="DeepSkyBlue">
-            <Label Text="Não há itens respondidos"
-                   FontSize="18"
-                   TextColor="White"
-                   VerticalOptions="CenterAndExpand" 
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout x:Name="slItens" 
+                         BackgroundColor="DeepSkyBlue"
+                         Padding="20">
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

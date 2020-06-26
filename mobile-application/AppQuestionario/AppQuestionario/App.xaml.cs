@@ -1,5 +1,7 @@
-﻿using SQLite;
+﻿using AppQuestionario.Models;
+using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,25 +11,24 @@ namespace AppQuestionario
     public partial class App : Application
     {
         public static readonly string NOME_DB = "questionarios.db3";
-
-        //TODO: Deixar id do aluno disponivel
+        
         public static Models.UsuarioModel UsuarioLogado
         {
             get;
             set;
         }
-
-        public static string Token
+        
+        public static List<DescricaoQuestionario> ListaQuestionarios
         {
             get;
-            private set;
+            set;
         }
 
         public App()
         {
             InitializeComponent();
 
-            Util.MockUsuarios();
+            //Util.MockUsuarios();
             MainPage = new NavigationPage(new MainPage());
         }
 

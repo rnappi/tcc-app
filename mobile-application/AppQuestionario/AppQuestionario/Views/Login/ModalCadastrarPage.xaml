@@ -2,14 +2,107 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="clr-namespace:Flex.Controls;assembly=Flex"
              mc:Ignorable="d"
+             Title="Cadastrar novo usuário"
              x:Class="AppQuestionario.Views.Login.ModalCadastrarPage">
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Cadastrar novo usuário"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Opacity="1">
+            <Grid x:Name="gridLogin">
+                <Image Source="folhas.jpg" Aspect="Fill" Opacity="0.3" />
+                <ScrollView>
+                    <StackLayout Margin="10" Padding="50">
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Image Source="name.png" HeightRequest="30" WidthRequest="30" Visual="Material"/>
+                            <Entry
+                                x:Name="txtNome"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite o nome"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Image Source="email.png" HeightRequest="30" WidthRequest="30" Visual="Material"/>
+                            <Entry
+                                x:Name="txtEmail"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite o email"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Image Source="user.png" HeightRequest="30" WidthRequest="30" Visual="Material"/>
+                            <Entry
+                                x:Name="txtUsuario"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite o usuário"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="0,15,0,0">
+                            <Image Source="password.png" HeightRequest="30" WidthRequest="30"/>
+                            <Entry
+                                x:Name="txtSenha"
+                                Margin="0,0,0,0"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                IsPassword="True"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                                Placeholder="Digite a senha"
+                                PlaceholderColor="Gray"
+                                Visual="Material"
+                                BackgroundColor="Transparent" />
+                        </StackLayout>
+
+                        <StackLayout Orientation="Vertical" Margin="0,30" HorizontalOptions="FillAndExpand" >
+                            <ActivityIndicator
+                                x:Name="aiLoad"
+                                IsVisible="False"
+                                IsRunning="True"
+                                Color="Blue"
+                                Visual="Material"
+                                HorizontalOptions="Center"
+                                />
+
+                            <controls:FlexButton
+                                x:Name="btnCadastrar"
+                                Clicked="btnCadastrar_Clicked"
+                                HorizontalOptions="Center"
+                                HeightRequest="50"
+                                FontSize="16"
+                                WidthRequest="150"
+                                CornerRadius="10"
+                                Text="Cadastrar"
+                                ForegroundColor="White"
+                                BackgroundColor="#3949ab"
+                                HighlightBackgroundColor="#3000ab"/>
+                        </StackLayout>
+
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
+
 </ContentPage>

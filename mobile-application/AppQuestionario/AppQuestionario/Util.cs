@@ -1,10 +1,12 @@
 ﻿using AppQuestionario.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,18 +19,28 @@ namespace AppQuestionario
     public static class Util
     {
         private static readonly string URI_LOCAL_ANDROID = "http://10.0.2.2:8080/";
-        private static readonly string URI_LOCAL = "http://127.0.1.1:8080/";
 
         public static async Task<UsuarioModel> Login(UsuarioModel usuario)
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
             using (var httpClient = new HttpClient())
             {
+                JsonMediaTypeFormatter jsonFormat = new JsonMediaTypeFormatter();
+                jsonFormat.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore;
+                jsonFormat.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+
                 httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // HTTP POST - define o objeto
-                HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/auth", usuario);
+                HttpResponseMessage response = await httpClient.PostAsync("api/auth", usuario, jsonFormat);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -39,6 +51,7 @@ namespace AppQuestionario
 
             return null;
         }
+
         public static string PegarQuestionario(int idQuestionario)
         {
             string url = $"http://127.0.0.1:8080/api/questionarios/{idQuestionario}";
@@ -69,29 +82,47 @@ namespace AppQuestionario
             return retorno;
         }
 
-        public static void SalvarQuestionariosAluno(List<Questionario> questionarios, int idAluno)
+        public static async Task<string> SalvarQuestionariosAluno(RespostasQuestionario respostasQuestionario)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.UsuarioLogado.AccessToken);
+
+                // HTTP POST - define o objeto
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/tentativas", respostasQuestionario);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            return null;
         }
 
-        public static string PegarQuestionariosAluno()
+        public static async Task<string> PegarQuestionariosAluno()
         {
-            string url = $"http://localhost:8080/api/alunos/{App.UsuarioLogado.ID_Aluno}/questionarios";
-
-            //No android o localhost é 10.0.2.2
-            if (Device.RuntimePlatform == Device.Android)
+            using (var httpClient = new HttpClient())
             {
-                url = $"http://10.0.2.2:8080/api/alunos/{App.UsuarioLogado.ID_Aluno}/questionarios";
+                var url = $"api/alunos/{App.UsuarioLogado.ID_Aluno}/questionarios";
+
+                httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", App.UsuarioLogado.AccessToken);
+
+                var response = httpClient.GetAsync(url).Result;
+                                
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
             }
 
-            string json = "";
-            using (var webClient = new WebClient())
-            {
-                webClient.Headers.Add("Authentication-Token", App.Token);
-                json = webClient.DownloadString(url);
-            }
-
-            return json;
+            return null;
         }
 
         public static string MockPegarQuestionariosAluno()
@@ -143,30 +174,6 @@ namespace AppQuestionario
             return retorno;
         }
 
-        public static async Task EnviarEmail(string subject, string body, List<string> recipients)
-        {
-            try
-            {
-                var message = new EmailMessage
-                {
-                    Subject = subject,
-                    Body = body,
-                    To = recipients,
-                    //Cc = ccRecipients,
-                    //Bcc = bccRecipients
-                };
-                await Email.ComposeAsync(message);
-            }
-            catch (FeatureNotSupportedException fbsEx)
-            {
-                // Email is not supported on this device
-            }
-            catch (Exception ex)
-            {
-                // Some other exception occurred
-            }
-        }
-
         public static async Task<string> SalvarLog(LogSistema log)
         {
             using (var httpClient = new HttpClient())
@@ -178,6 +185,26 @@ namespace AppQuestionario
 
                 // HTTP POST - define o objeto
                 HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/log", log);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            return null;
+        }
+
+        public static async Task<string> CriarUsuario(CadastroUsuario cadUsuario)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(URI_LOCAL_ANDROID);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP POST - define o objeto
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/usuario/aluno", cadUsuario);
 
                 if (response.IsSuccessStatusCode)
                 {

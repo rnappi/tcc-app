@@ -31,19 +31,68 @@ namespace AppQuestionario.Views
 
         private void MontarItens()
         {
-            //var json = Util.PegarQuestionariosAluno();
-            var json = Util.MockPegarQuestionariosAluno();
+            var listaQuestionarios = App.ListaQuestionarios
+                                        .GroupBy(g => g.IdQuestionario)
+                                        .Select(s => s.First())
+                                        .ToList()
+                                        .FindAll(f => f.Tentativa == 0);
 
-            List<DescricaoQuestionario> listaQuestionarios = JsonConvert.DeserializeObject<List<DescricaoQuestionario>>(json);
-
-            foreach (var item in listaQuestionarios)
+            if (listaQuestionarios.Count == 0)
             {
-                var cardFrame = CriarFrame(item);
-                slItens.Children.Add(cardFrame);
+                var label = new Label()
+                {
+                    Text = "Não há novos questionários",
+                    TextColor = Color.White,
+                    FontSize = 20,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                slItens.Children.Add(label);
+                return;
+            }
+            else
+            {
+                foreach (var item in listaQuestionarios)
+                {
+                    var cardFrame = CriarFrameSelecaoQuestionario(item);
+                    slItens.Children.Add(cardFrame);
+                }
             }
         }
 
-        private Frame CriarFrame(DescricaoQuestionario questionario)
+        private TapGestureRecognizer CriarEventoToque(DescricaoQuestionario questionario)
+        {
+            var tapGestureRecognizer = new TapGestureRecognizer();
+
+            tapGestureRecognizer.Tapped += (sender, eventArgs) => {
+
+                Navigation.PushAsync(new QuestionarioPage(questionario.IdQuestionario));
+
+                var frameDisparouEvento = (sender as Frame);
+
+                foreach (var item in slItens.Children)
+                {
+                    if (item is Frame)
+                    {
+                        (item as Frame).BackgroundColor = Color.White;
+                    }
+                }
+
+                if (frameDisparouEvento.BackgroundColor == Color.LightGray)
+                {
+                    frameDisparouEvento.BackgroundColor = Color.White;
+                }
+                else
+                {
+                    frameDisparouEvento.BackgroundColor = Color.LightGray;
+                }
+            };
+
+            return tapGestureRecognizer;
+        }
+
+        private Frame CriarFrameSelecaoQuestionario(DescricaoQuestionario questionario)
         {
             Frame cardFrame = new Frame
             {
@@ -72,36 +121,14 @@ namespace AppQuestionario.Views
                         },
                         new Label
                         {
-                            Text = $"{questionario.qtdPerguntas} perguntas e {questionario.qtdAlternativas} alternativas"
+                            Text = $"{questionario.QtdPerguntas} perguntas e {questionario.QtdAlternativas} alternativas"
                         }
                     }
                 }
             };
 
-            var tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += (s, e) => {
-                Navigation.PushAsync(new QuestionarioPage(questionario.id_Questionario));
-                //App.Current.MainPage = new QuestionarioPage();
-                var f = (s as Frame);
-
-                foreach (var item in slItens.Children)
-                {
-                    if(item is Frame)
-                    {
-                        (item as Frame).BackgroundColor = Color.White;
-                    }
-                }
-                
-                if (f.BackgroundColor == Color.LightGray)
-                {
-                    f.BackgroundColor = Color.White;
-                }
-                else
-                {
-                    f.BackgroundColor = Color.LightGray;
-                }
-            };
-
+            
+            var tapGestureRecognizer = CriarEventoToque(questionario);
             cardFrame.GestureRecognizers.Add(tapGestureRecognizer);
 
             return cardFrame;

@@ -22,11 +22,15 @@ namespace AppQuestionario.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QuestionarioPage : CarouselPage
     {
+        private int qtdPerguntas = 0;
+        private int idQuestionarioCarregado = 0;
         public static List<Resposta> listaRespostas;
 
         public QuestionarioPage(int idQuestionario)
         {
             InitializeComponent();
+
+            idQuestionarioCarregado = idQuestionario;
 
             try
             {
@@ -41,24 +45,20 @@ namespace AppQuestionario.Views
         private void MontarPaginas(int idQuestionario)
         {
             listaRespostas = new List<Resposta>();
+            var questionarios = App.ListaQuestionarios.FindAll(f => f.IdQuestionario == idQuestionario);
 
-            //var json = Util.PegarQuestionario(idQuestionario);
-            var json = Util.MockPegarQuestionario(idQuestionario);
+            //Atualiza quantidade de perguntas do questionario
+            qtdPerguntas = questionarios[0].QtdPerguntas;
+            Title = questionarios[0].NomeQuestionario;
 
-            List<Questionario> questionarios = JsonConvert.DeserializeObject<List<Questionario>>(json);
-
-            var perguntas = questionarios.GroupBy(g => g.id_Pergunta)
+            var perguntas = questionarios.GroupBy(g => g.IdPergunta)
                                         .Select(s => s.First())
                                         .ToList();
-            
-            //TODO: Salvar BD Local
-            //Util.SalvarQuestionariosAluno(questionarios, idQuestionario);
-
             int i = 1;
 
             foreach (var p in perguntas)
             {
-                var alternativas = questionarios.FindAll(f => f.id_Pergunta == p.id_Pergunta);
+                var alternativas = questionarios.FindAll(f => f.IdPergunta == p.IdPergunta);
 
                 var slPergunta = new StackLayout()
                 {
@@ -89,8 +89,8 @@ namespace AppQuestionario.Views
                 {
                     var alternativa = new ConteudoAlternativa()
                     {
-                        IdPergunta = p.id_Pergunta,
-                        IdAlternativa = item.id_Alternativa,
+                        IdPergunta = p.IdPergunta,
+                        IdAlternativa = item.IdAlternativa,
                         Letra = Convert.ToString(numAlternativa),
                         Descricao = item.DescricaoAlternativa
                     };
@@ -113,6 +113,49 @@ namespace AppQuestionario.Views
 
                 Children.Add(page);
                 i++;
+            }
+        }
+
+        private async void btnConfirmar_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if(qtdPerguntas == listaRespostas.Count)
+                {
+                    RespostasQuestionario respostasQuestionario = new RespostasQuestionario()
+                    {
+                        IdAluno = App.UsuarioLogado.ID_Aluno,
+                        IdQuestionario = idQuestionarioCarregado,
+                        Respostas = listaRespostas.Select(s => s.IdAlternativa).ToList()
+                    };
+
+                    this.IsEnabled = false;
+                    var json = await Util.SalvarQuestionariosAluno(respostasQuestionario);
+
+                    var respAPI = JsonConvert.DeserializeObject<RespostaAPI>(json);
+
+                    var listaQuestionarioAtual = App.ListaQuestionarios.FindAll(f => f.IdQuestionario == idQuestionarioCarregado);
+                    foreach (var item in listaQuestionarioAtual)
+                    {
+                        item.QtdAcertos = respAPI.QtdAcertos;
+                        item.Tentativa = respAPI.IdTentativa;
+                    }
+
+                    var mensagem = $"Você acertou {respAPI.QtdAcertos} de {listaQuestionarioAtual[0].QtdPerguntas} perguntas do questionário {listaQuestionarioAtual[0].NomeQuestionario}.";
+                    App.Current.MainPage = new NavigationPage(new AppQuestionario.MenuPage(mensagem) { Title = App.UsuarioLogado.Nome });
+                }
+                else
+                {
+                    await DisplayAlert("Erro", "O questionário está incompleto, responda todas as perguntas para finalizar o questionário", "Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", ex.Message, "Ok");
+            }
+            finally
+            {
+                this.IsEnabled = true;
             }
         }
     }

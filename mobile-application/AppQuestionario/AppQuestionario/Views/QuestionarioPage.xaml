@@ -6,6 +6,6 @@
              mc:Ignorable="d"
              x:Class="AppQuestionario.Views.QuestionarioPage">
     <CarouselPage.ToolbarItems>
-        <ToolbarItem x:Name="btnConfirmar" Text="Confirmar" IconImageSource="confirm32.png" />
+        <ToolbarItem x:Name="btnConfirmar" Text="Confirmar" IconImageSource="confirm32.png" Clicked="btnConfirmar_Clicked"/>
     </CarouselPage.ToolbarItems>
 </CarouselPage>
