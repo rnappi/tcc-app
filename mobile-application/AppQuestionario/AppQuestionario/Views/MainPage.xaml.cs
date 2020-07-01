@@ -26,6 +26,7 @@ namespace AppQuestionario
             InitializeComponent();
 
             BindingContext = this;
+            var location = Geolocation.GetLastKnownLocationAsync();
         }
 
         private void btnConfig_Clicked(object sender, EventArgs e)

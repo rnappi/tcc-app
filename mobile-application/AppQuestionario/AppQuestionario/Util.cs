@@ -121,16 +121,16 @@ namespace AppQuestionario
             return null;
         }
 
-        public static string PegarLocalizacao()
+        public static async Task<string> PegarLocalizacao()
         {
-            //var location = await Geolocation.GetLastKnownLocationAsync();
+            var location = await Geolocation.GetLastKnownLocationAsync();
             string retorno = "Não foi possível pegar a localização";
 
-            //if (location != null)
-            //{
-                //retorno = $"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}";
-                retorno = "Latitude: 0, Longitude: 0, Altitude: 0";
-            //}
+            if (location != null)
+            {
+                retorno = $"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}";
+                //retorno = "Latitude: 0, Longitude: 0, Altitude: 0";
+            }
 
             return retorno;
         }

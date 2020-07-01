@@ -34,7 +34,7 @@ namespace AppQuestionario
             string localizacao = "";
             try
             {
-                localizacao = Util.PegarLocalizacao();
+                localizacao = Util.PegarLocalizacao().Result;
             }
             catch (Exception)
             {
@@ -73,7 +73,7 @@ namespace AppQuestionario
                 string localizacao = "";
                 try
                 {
-                    localizacao = Util.PegarLocalizacao();
+                    localizacao = Util.PegarLocalizacao().Result;
                 }
                 catch (Exception)
                 {
