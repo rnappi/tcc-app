@@ -38,7 +38,12 @@ def autenticar(json):
     aluno = {}
 
     try:
-        query = """select * 
+        query = """select id_Aluno,
+                          nome,
+                          usuario,
+                          email,
+                          data_cadastro,
+                          data_ultima_atualizacao
                      from alunos as a
                     where binary a.usuario = %s
                       and binary a.senha = %s """
@@ -46,14 +51,14 @@ def autenticar(json):
         params = (json['Usuario'], json['Senha'])
 
         cursor.execute(query, params)
-        
+
         for result in cursor:
-            aluno = { 'id_Aluno': result[0], 
+            aluno = { 'id_Aluno': result[0],
                       'nome': result[1],
                       'usuario': result[2],
-                      'email': result[4],
-                      'data_cadastro': result[5],
-                      'data_ultima_atualizacao': result[6]}
+                      'email': result[3],
+                      'data_cadastro': result[4],
+                      'data_ultima_atualizacao': result[5]}
 
     except Exception as e:
         cnx.rollback()
